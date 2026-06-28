@@ -1,6 +1,6 @@
 const express = require('express');
 
-async function Block_1_httpMethods(){
+function Block_1_httpMethods(){
     return new Promise((resolve)=>{
         const app = express()
         app.use(express.json())
@@ -104,10 +104,6 @@ async function Block_1_httpMethods(){
         })
     })
 }
-
-
-
-
 
 
 

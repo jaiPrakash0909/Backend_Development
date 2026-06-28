@@ -1,6 +1,6 @@
 const express = require('express');
 
-async function block1_basic_server(){
+function block1_basic_server(){
     return new Promise((resolve)=>{
         const app = express()
         app.use(express.json())
@@ -93,7 +93,7 @@ async function block1_basic_server(){
     })
 }
 
-async function block2_response() {
+function block2_response() {
     return new Promise((resolve) =>{
         const app = express()
 
