@@ -36,9 +36,8 @@ function Block_1_httpMethods(){
             const route = routes[req.params.id]
             if(!route) return res.status(404).json({error: "No train on this id"});
             res.json(route)
-
-            
         })
+
         app.post('/routes', (req, res) => {
                 //no validation, no zod
                 const newRoute = {id: nextid++, ...req.body}
