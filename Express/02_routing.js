@@ -104,7 +104,52 @@ function Block_1_httpMethods(){
     })
 }
 
+function Block_1_httpMethods(){
+    return new Promise((resolve)=>{
+        const app = express()
+        app.use(express.json())
 
+        // /files/docs/redme.txt etc.. = *filepath
+        // /files/assets/style.css
+        // wildcard == anything
+        app.get('/files/*filepath', (req, res)=>{
+            const filepath = req.params.filepath
+            res.json({filepath, type: "wildcard"})
+        })
+
+        app
+            .route("/schedule")
+            .get((req, res) => {})
+            .post((req, res) => {})
+            .put((req, res) => {})
+            .delete((req, res) => {})
+
+        app.use("/api", (req, res) => {
+            // its a prefetch match
+            // .get se pahle ye chalta hai 
+        })
+
+
+
+        // frontend
+        const server = app.listen(0, async () => {
+            const port = server.address().port
+            const base = `http://127.0.0.1:${port}`
+            
+            try{
+            
+            }
+            catch (error){
+                console.log(error)
+            }
+
+            server.close(()=>{
+                console.log("block 1 served")
+                resolve()
+            })
+        })
+    })
+}
 
 
 
