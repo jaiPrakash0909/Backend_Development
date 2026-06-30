@@ -104,7 +104,7 @@ function Block_1_httpMethods(){
     })
 }
 
-function Block_1_httpMethods(){
+function Block_2_httpMethods(){
     return new Promise((resolve)=>{
         const app = express()
         app.use(express.json())
@@ -155,6 +155,7 @@ function Block_1_httpMethods(){
 
 async function main(){
     await Block_1_httpMethods()
+    await Block_2_httpMethods()
     process.exit(0)
 }
 
