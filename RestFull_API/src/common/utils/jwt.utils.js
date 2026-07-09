@@ -1,5 +1,14 @@
 import crypto from "crypto"
-import { raw } from "express"
+import jwt from "jsonwebtoken"
+
+
+
+const generateAccessToken = (payload) => {
+    jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
+        expiresIn: process.env.JWT_ACCESS_SECRET || '15m'
+    })
+}
+
 
 
 const generateResetToken = () => {
