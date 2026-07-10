@@ -1,6 +1,14 @@
+import { useReducer } from "react"
 import ApiError from "../../common/utils/api-error.js"
-import { generateAccessToken, generateResetToken } from "../../common/utils/jwt.utils.js"
+import {
+    generateAccessToken,
+    generateRefreshToken, 
+    generateResetToken 
+}  from "../../common/utils/jwt.utils.js"
 import User from "./auth.model.js"
+
+
+const hashToken = (token) => crypto.createHash("sha256").update(token).digest("hex")
 
 
 const register = async ({name, email, password, role})=> {
@@ -45,7 +53,14 @@ const login = async ({email, password})=> {
     const accessToken = generateAccessToken({id: user._id, role: user.role})
     const refreshToken = generateResetToken({id: user._id})
 
-    user.refreshToken = refreshToken
+    user.refreshToken = hashToken(refreshToken)
+    await user.save({validateBeforeSave: false})
+
+    const userObj = user.toObject()
+    delete userObj.password
+    delete userObj.refreshToken
+
+    return {user:userObj, accessToken, refreshToken}
 }
 
 
