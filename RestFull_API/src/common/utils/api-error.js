@@ -13,8 +13,12 @@ class ApiError extends Error{
     static unauthorized(message = "Unauthorized"){
         return new ApiError(401, message)
     }
-    static conflict(message = "Conflict - User already exists"){
+    static conflict(message = "Conflict"){
         return new ApiError(409, message)
+    }
+
+    static forbidden(message = "forbidden"){
+        return new ApiError(412, message)
     }
 
 
