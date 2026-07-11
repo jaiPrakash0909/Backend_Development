@@ -93,5 +93,18 @@ const logout = async (userId) => {
     await User.findByIdAndUpdate(userId, {refreshToken: null})
 }
 
+const forgotPassword = async (email) => {
+    const user = await User.findOne({email})
+    if(!user) throw ApiError.notFound("No account with that email");
+
+    const {rawToken, hashToken} = generateResetToken()
+    user.resetPasswordtoken = hashedToken
+    user.resetpasswordExpires = Date.now() + 15 * 60 * 1000
+
+    await user.save()
+
+    // mail
+}
+
 
 export {register}
