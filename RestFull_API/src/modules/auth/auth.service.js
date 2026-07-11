@@ -80,6 +80,17 @@ const refresh = async (token) => {
     const accessToken = generateAccessToken({id: user._id, role: user.role})
 
     return {accessToken}
+};
+
+const logout = async (userId) => {
+    // const user = await User.findById(userId);
+    // if(!user) throw ApiError.unauthorized("User not found");
+
+    // user.refreshToken = undefined;
+    // await user.save({validateBeforeSave: false });
+
+
+    await User.findByIdAndUpdate(userId, {refreshToken: null})
 }
 
 
