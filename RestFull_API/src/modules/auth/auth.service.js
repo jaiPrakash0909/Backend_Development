@@ -3,9 +3,11 @@ import ApiError from "../../common/utils/api-error.js"
 import {
     generateAccessToken,
     generateRefreshToken, 
-    generateResetToken 
+    generateResetToken, 
+    verifyRefreshToken
 }  from "../../common/utils/jwt.utils.js"
 import User from "./auth.model.js"
+import { verify } from "jsonwebtoken"
 
 
 const hashToken = (token) => crypto.createHash("sha256").update(token).digest("hex")
@@ -61,6 +63,23 @@ const login = async ({email, password})=> {
     delete userObj.refreshToken
 
     return {user:userObj, accessToken, refreshToken}
+}
+
+const refresh = async (token) => {
+    if(!token) throw ApiError.unauthorized("Refresh token missing");
+    const decoded = verifyRefreshToken(token)
+
+    const user = await User.findById(decoded.id).select("+refreshToken");
+    if(!user) throw ApiError.unauthorized("User not found")
+
+    if(user.refreshToken !== hashToken(token)){
+        throw ApiError.unauthorized("Invalid refresh token")
+
+    }
+
+    const accessToken = generateAccessToken({id: user._id, role: user.role})
+
+    return {accessToken}
 }
 
 
