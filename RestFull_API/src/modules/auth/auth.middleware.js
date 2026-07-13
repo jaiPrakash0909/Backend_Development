@@ -1,8 +1,41 @@
+import { verify } from "jsonwebtoken";
 import ApiError from "../../common/utils/api-error";
 
 import User from "./auth.model.js";
+import { verifyAccessToken } from "../../common/utils/jwt.utils";
 
 
-const authenticate = async (req, res, next) => {};
+const authenticate = async (req, res, next) => {
 
-export { authenticate };
+    let token;
+    if(req.header.authorization?.startsWith("Bearer")){
+        token = req.header.authorization.split(" ")[1]
+    }
+
+    if(!token) throw ApiError.unauthorized("Not Authenticated")
+    const decoded = verifyAccessToken(token)
+    const user = await User.findById(decoded.id)
+    if(!user) throw ApiError.unauthorized("User no longer exists")
+
+    req.user = {
+        id: user._id,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+    };
+    next()
+};
+
+
+const authorize = (...roles) => {
+    return (req, res, next) => {
+        if(!roles.included(req.user.role)) {
+            throw ApiError.forbidden(
+                "You do not have permission to perform this action",
+            );
+        }
+        next();
+    };
+};
+
+export { authenticate, authorize };
