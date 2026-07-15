@@ -8,6 +8,7 @@ import {
 }  from "../../common/utils/jwt.utils.js"
 import User from "./auth.model.js"
 import { verify } from "jsonwebtoken"
+import { sendVerificationMail } from "../../common/config/email.js"
 
 
 const hashToken = (token) => crypto.createHash("sha256").update(token).digest("hex")
@@ -26,9 +27,16 @@ const register = async ({name, email, password, role})=> {
             password,
             role,
             verificationToken: hashedToken
-        })
+        });
 
         //send and email to user with token: rawToken
+
+        try{
+            await sendVerificationMail(email, token)
+        } catch (error) {
+            console.error(error)
+        }
+
 
         const userObj = user.toObject()
         delete userObj.passworddelete
@@ -110,5 +118,21 @@ const forgotPassword = async (email) => {
     // mail
 }
 
+const verifyEmail = async(token) => {
+    const hashedToken = hashToken(token);
+    const user = await User.findOne({vefificationToken: hashedToken}).select("+verificationToken")
 
-export {register, login, refresh, logout, forgotPassword };
+    // if user not found
+    user.isVarified = true
+    user.varificationToken = undefined
+    await user.save();
+    return user;
+}
+
+const getMe = async (userId) => {
+    const user = await User.findById(userId);
+    if(!user) throw ApiError.notFound("User not found");
+    return user;
+};
+
+export {register, login, refresh, logout, forgotPassword, getMe, verifyEmail };
