@@ -1,12 +1,9 @@
 import { verify } from "jsonwebtoken";
 import ApiError from "../../common/utils/api-error";
-
 import User from "./auth.model.js";
 import { verifyAccessToken } from "../../common/utils/jwt.utils";
 
-
 const authenticate = async (req, res, next) => {
-
     let token;
     if(req.header.authorization?.startsWith("Bearer")){
         token = req.header.authorization.split(" ")[1]
