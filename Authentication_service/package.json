@@ -6,17 +6,26 @@
   "scripts": {
     "start": "node dist/index",
     "build": "tsc -P .",
-    "dev": "tsc-watch --onSuccess \"node dist/index\""
+    "dev": "tsc-watch --onSuccess \"node dist/index\"",
+    "studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "tsc-watch": "^7.2.1"
+    "@types/pg": "^8.20.0",
+    "drizzle-kit": "1.0.0-rc.4",
+    "tsc-watch": "^7.2.1",
+    "tsx": "^4.23.1"
   },
   "dependencies": {
     "@types/node": "^26.1.1",
-    "express": "^5.2.1"
+    "dotenv": "^17.4.2",
+    "drizzle-orm": "1.0.0-rc.4",
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
   }
 }

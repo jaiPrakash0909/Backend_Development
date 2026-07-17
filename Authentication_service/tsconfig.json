@@ -2,7 +2,8 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "./src",
+    // include project root so config files (e.g. drizzle.config.ts) are inside rootDir
+    "rootDir": "./",
     "outDir": "./dist",
 
     // Environment Settings
@@ -40,5 +41,9 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    // include other files at project root (adjust as needed)
+    
   }
+  ,
+  "include": ["src/**/*", "drizzle.config.ts"]
 }
