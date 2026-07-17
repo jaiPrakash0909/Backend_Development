@@ -1,0 +1,17 @@
+{
+  "name": "Authentication_service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index",
+    "build": "tsc -P .",
+    "dev": "tsc-watch --onSuccess \"node dist/index\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",  
+  "devDependencies": {
+    "tsc-watch": "^7.2.1"
+  }
+}
