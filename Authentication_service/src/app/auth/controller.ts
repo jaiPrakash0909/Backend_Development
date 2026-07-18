@@ -4,6 +4,8 @@ import { signinPayloadModel, signupPayloadModel } from "./models";
 import { db } from "../../db";
 import { usersTable } from "../../db/schema";
 import { eq } from "drizzle-orm";
+import { createUserToken } from './utils/token'
+import type { UserTokenPayload } from './utils/token'
 import { error } from "node:console";
 
 
@@ -53,6 +55,7 @@ class AuthenticationController {
         if (userSelect.password !== hash) return res.status(400).json({message: `email or password is incorect`})
 
         // TODO: Token Banao
+        const token = createUserToken({id: userSelect.id})
 
         return res.json({message: 'Signin Success', data: {token: 1}})
     }
