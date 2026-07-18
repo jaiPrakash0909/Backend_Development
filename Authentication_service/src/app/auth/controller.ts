@@ -54,10 +54,22 @@ class AuthenticationController {
 
         if (userSelect.password !== hash) return res.status(400).json({message: `email or password is incorect`})
 
-        // TODO: Token Banao
         const token = createUserToken({id: userSelect.id})
 
         return res.json({message: 'Signin Success', data: {token: 1}})
+    }
+
+    public async handleMe(req: Request, res: Response) {
+        // @ts-ignore
+        const { id } = req.user! as UserTokenPayload
+
+        const [userResult] = await db.select().from(usersTable).where(eq(usersTable.id, id))
+
+        return res.json({
+            firstName: userResult?.firstName,
+            lastName: userResult?.lastName,
+            email: userResult?.email
+        })
     }
 }
 
