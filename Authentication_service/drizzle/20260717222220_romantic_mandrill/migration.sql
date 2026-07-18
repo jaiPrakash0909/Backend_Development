@@ -7,5 +7,6 @@ CREATE TABLE "users" (
 	"password" varchar(66),
 	"salt" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp
+	"updated_at" timestamp,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );

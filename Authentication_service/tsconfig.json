@@ -3,8 +3,8 @@
   "compilerOptions": {
     // File Layout
     // include project root so config files (e.g. drizzle.config.ts) are inside rootDir
-    // "rootDir": "./",
-    // "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -12,7 +12,7 @@
     "target": "esnext",
     
     // For nodejs:
-    // "lib": ["esnext"],
+    "lib": ["esnext"],
     "types": ["node"],
     // and npm install -D @types/node
 
