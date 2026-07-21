@@ -20,6 +20,10 @@ import fs from "node:fs"
 
 // fs.cpSync("test1.txt", "finalText.txt")
 
+//delete folder
+// fs.rmSync("myFolder")
+
+
 //delete empty folder
 // fs.rmdirSync("myFolder")
 
