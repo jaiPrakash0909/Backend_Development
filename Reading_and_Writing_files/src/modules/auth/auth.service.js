@@ -11,6 +11,9 @@ import {
   sendVerificationEmail,
   sendResetPasswordEmail,
 } from "../../common/config/email.js";
+import fs from "node:fs"
+import imagekit from "../../common/config/imagekit.config.js";
+import { Folders } from "@imagekit/nodejs/resources/index.mjs";
 
 // Hash refresh token before storing — same approach as reset tokens
 const hashToken = (token) =>
@@ -160,6 +163,39 @@ const getMe = async (userId) => {
   return user;
 };
 
+const avatarUpload = async(userId, file)=>{
+  try {
+    const fileStream = fs.createReadStream(file.path);
+    const uploadResponse = await imagekit.files.upload({
+      file:fileStream,
+      fileName:file.filename,
+      folder:"/user-avatars"
+    })
+
+    await User.findByIdAndUpdate(
+      userId,
+      {avatar:uploadResponse.url},
+      {new:true}
+    );
+    fs.unlinkSync(file.path);
+
+    return {
+      url:uploadResponse.url,
+      fileId:uploadResponse.fileId
+    }
+  } catch (error) {
+    try {
+      if(file.path && fs.existsSync(file.path)){
+        fs.unlinkSync(file.path)
+      }
+    } catch (error) {
+      console.error("Error deleting temp file:", err)
+    }
+
+    throw error;
+  }
+}
+
 export {
   register,
   login,
@@ -169,4 +205,5 @@ export {
   forgotPassword,
   resetPassword,
   getMe,
+  avatarUpload
 };
