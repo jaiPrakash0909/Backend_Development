@@ -1,13 +1,31 @@
+import * as ownerService from "../services/owner.service.js"
+import ApiResponse from "../../../common/utils/api-response.js"
 
-const creatOwner = async(req, res) => {};
 
-const getAllOwners = async(req, res) => {};
+const creatOwner = async(req, res) => {
+    const owner = await ownerService.createOwner(req.body);
+    ApiResponse.created(res, "Owner created successfully", owner)
+};
 
-const getOwnerById = async(req, res) => {};
+const getAllOwners = async(req, res) => {
+    const owners = await ownerService.getAllOwners();
+    ApiResponse.ok(res, "Owners fetched successfuly", owners)
+};
 
-const updateOwner = async(req, res) => {};
+const getOwnerById = async(req, res) => {
+    const owner = await ownerService.getOwnerById(req.params.id);
+    ApiResponse.ok(res, "Owners fetched successfuly", owner)
+};
 
-const deleteOwner = async(req, res) => {};
+const updateOwner = async(req, res) => {
+    const updateOwner = await ownerService.updateOwner(req.params.id, req.body);
+    ApiResponse.ok(res, "owner updated succesfully", updatedOwner);
+};
+
+const deleteOwner = async(req, res) => {
+    await ownerService.deleteOwner(req.params.id);
+    ApiResponse.ok(res, "owner updated succesfully");
+};
 
 export {
     creatOwner,

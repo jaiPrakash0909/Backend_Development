@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as controller from "../controllers/owner.controller.js"
+import { deflate } from "zlib";
 
 const router = Router();
 
@@ -20,3 +21,5 @@ router.put("/:id", controller.updateOwner)
 // delete owner
 
 router.delete("/:id", controller.deleteOwner)
+
+export default router;
