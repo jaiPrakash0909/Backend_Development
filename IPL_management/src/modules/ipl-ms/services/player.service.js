@@ -22,4 +22,25 @@ const transferPlayer = async(playerId, newTeamId)=>{
     }
 
     return player;
+};
+
+
+const updatePlayerRole = async(playerId, role)=>{
+    const player = await Player.findByIdAndUpdate(
+        playerId,
+        {role},
+        {new: true, runValidators:true}
+    ).populate("teamId","name");
+
+    if(!player){
+        throw ApiError.notfound("Player nof dound");
+    }
+
+    return player;
+}
+
+
+export {
+    transferPlayer,
+    updatePlayerRole
 }
