@@ -1,5 +1,5 @@
 import http from 'node:http'
-import { Server } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 import path from 'node:path'
 import express from 'express'
 
@@ -12,6 +12,15 @@ async function main() {
 
 
     io.attach(server);
+
+    io.on('connection', (Socket) => {
+        console.log(`A new socket has connected`, Socket.id);
+
+        Socket.on('user:message', (data) => {
+            console.log('Message from socket', data);
+            
+        })
+    })
 
     server.listen(9000,() => {
         console.log(`Http server is running on PORT 9000`)

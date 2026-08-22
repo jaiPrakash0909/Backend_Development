@@ -5,10 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Interface</title>
 
-    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: #111827;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .chat-container {
+            width: min(95%, 600px);
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #1f2937;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px #0008;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background: #2563eb;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            width: fit-content;
+            max-width: 75%;
+            margin-bottom: 14px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            line-height: 1.4;
+        }
+
+        .received {
+            background: #374151;
+        }
+
+        .sent {
+            margin-left: auto;
+            background: #2563eb;
+        }
+
+        .message small {
+            display: block;
+            margin-top: 4px;
+            color: #cbd5e1;
+            font-size: 0.7rem;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: #111827;
+        }
+
+        .chat-form input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            outline: none;
+            background: #1f2937;
+            color: #fff;
+        }
+
+        .chat-form button {
+            padding: 0 20px;
+            border: 0;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .chat-form button:hover {
+            background: #1d4ed8;
+        }
+    </style>
 </head>
 
 <body>
+    <main class="chat-container">
+        <header class="chat-header">
+            <h1>Chat Room</h1>
+        </header>
 
+        <section class="messages" id="messages">
+            <div class="message received">
+                Hello! Welcome to the chat.
+                <small>10:30 AM</small>
+            </div>
+        </section>
+
+        <form class="chat-form" id="chatForm">
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="Type a message..."
+                autocomplete="off"
+                required
+            >
+            <button type="submit">Send</button>
+        </form>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    
+
+    <script>
+        const socket = io()
+        const chatForm = document.getElementById("chatForm");
+        const messageInput = document.getElementById("messageInput");
+        const messages = document.getElementById("messages");
+
+        let messageHandler = null;
+
+        function onMessageInput(handler) {
+            messageHandler = handler;
+            socket.emit('user:message', {text})
+        }
+
+
+        chatForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            if (typeof messageHandler === "function") {
+                messageHandler({ message: text });
+            }
+
+            const message = document.createElement("div");
+            message.className = "message sent";
+            message.textContent = text;
+
+            messages.appendChild(message);
+            messageInput.value = "";
+            messages.scrollTop = messages.scrollHeight;
+        });
+
+        // Attach your handler here
+        onMessageInput((messageObject) => {
+            console.log("Message sent:", messageObject);
+            
+        });
+    </script>
 </body>
 </html>
