@@ -41,4 +41,5 @@ export {
     verifyAccessToken,
     verifyRefreshToken,
     generateAccessToken,
+    generateRefreshToken
 }

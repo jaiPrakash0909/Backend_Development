@@ -1,4 +1,5 @@
-import { verify } from "jsonwebtoken";
+// import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import ApiError from "../../common/utils/api-error.js";
 import User from "./auth.model.js";
 import { verifyAccessToken } from "../../common/utils/jwt.utils.js";

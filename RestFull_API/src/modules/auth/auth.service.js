@@ -7,7 +7,8 @@ import {
 }  from "../../common/utils/jwt.utils.js"
 import User from "./auth.model.js"
 import crypto from "crypto";
-import { verify } from "jsonwebtoken"
+// import { verify } from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { sendVerificationMail } from "../../common/config/email.js"
 
 
