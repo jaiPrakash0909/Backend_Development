@@ -1,4 +1,3 @@
-import { useReducer } from "react"
 import ApiError from "../../common/utils/api-error.js"
 import {
     generateAccessToken,
@@ -7,6 +6,7 @@ import {
     verifyRefreshToken
 }  from "../../common/utils/jwt.utils.js"
 import User from "./auth.model.js"
+import crypto from "crypto";
 import { verify } from "jsonwebtoken"
 import { sendVerificationMail } from "../../common/config/email.js"
 
@@ -16,7 +16,7 @@ const hashToken = (token) => crypto.createHash("sha256").update(token).digest("h
 
 const register = async ({name, email, password, role})=> {
     
-    const existing = User.findOne({email})
+    const existing = await User.findOne({email})
     if(existing) throw ApiError.conflict("Email already exists")
 
         const {rawToken, hashedToken} = generateResetToken()
@@ -32,15 +32,15 @@ const register = async ({name, email, password, role})=> {
         //send and email to user with token: rawToken
 
         try{
-            await sendVerificationMail(email, token)
+            await sendVerificationMail(email, rawToken)
         } catch (error) {
             console.error(error)
         }
 
 
         const userObj = user.toObject()
-        delete userObj.passworddelete
-        delete userObj.verificationToken
+        delete userObj.password;
+        delete userObj.verificationToken;
 
 
     return userObj
@@ -65,7 +65,10 @@ const login = async ({email, password})=> {
     }
 
     const accessToken = generateAccessToken({id: user._id, role: user.role})
-    const refreshToken = generateResetToken({id: user._id})
+    const refreshToken = generateResetToken({
+        id: user._id,
+        role: user.role
+    })
 
     user.refreshToken = hashToken(refreshToken)
     await user.save({validateBeforeSave: false})
@@ -109,7 +112,7 @@ const forgotPassword = async (email) => {
     const user = await User.findOne({email})
     if(!user) throw ApiError.notFound("No account with that email");
 
-    const {rawToken, hashToken} = generateResetToken()
+    const {rawToken, hashedToken} = generateResetToken()
     user.resetPasswordtoken = hashedToken
     user.resetpasswordExpires = Date.now() + 15 * 60 * 1000
 
@@ -120,7 +123,7 @@ const forgotPassword = async (email) => {
 
 const verifyEmail = async(token) => {
     const hashedToken = hashToken(token);
-    const user = await User.findOne({vefificationToken: hashedToken}).select("+verificationToken")
+    const user = await User.findOne({verificationToken: hashedToken}).select("+verificationToken")
 
     // if user not found
     user.isVarified = true
