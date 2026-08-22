@@ -1,7 +1,7 @@
 import { verify } from "jsonwebtoken";
-import ApiError from "../../common/utils/api-error";
+import ApiError from "../../common/utils/api-error.js";
 import User from "./auth.model.js";
-import { verifyAccessToken } from "../../common/utils/jwt.utils";
+import { verifyAccessToken } from "../../common/utils/jwt.utils.js";
 
 const authenticate = async (req, res, next) => {
     let token;
