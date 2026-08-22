@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         select: false
     },
     role: {
-        type: string,
+        type: String,
         enum: ["customer", "seller", "admin"],
         default: "customer"
     },
@@ -30,10 +30,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default :false
     },
-    varificationToken: {type: string, select: false},
-    refereshToken: {type: string, select: false}, 
-    resetPasswordtoken: {type: string, select: false}, 
-    resetpasswordExpires: {type: string, select: false}, 
+    varificationToken: {type: String, select: false},
+    refereshToken: {type: String, select: false}, 
+    resetPasswordtoken: {type: String, select: false}, 
+    resetpasswordExpires: {type: String, select: false}, 
 }, {timestamps: true})
 
 
